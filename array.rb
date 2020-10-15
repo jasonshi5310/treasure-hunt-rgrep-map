@@ -51,16 +51,17 @@ end
 # b.map(-3..-1) { |x| x[0].upcase + x[1,x.length] } = ["Bat", "Mat", “Sat”]
 # b.map { |x| x[0].upcase + x[1,x.length] } = ["Cat", "Bat", "Mat", "Sat"]
 
-a = [1,2,34,5]
-a[1]
-a[10]
-a.map(2..4) { |i| i.to_f}
-a.map { |i| i.to_f}
-b = ["cat","bat","mat","sat"]
-b[-1]
-b[5]
-b.map(2..10) { |x| x[0].upcase + x[1,x.length] }
-b.map(2..4) { |x| x[0].upcase + x[1,x.length] }
-b.map(-3..-1) { |x| x[0].upcase + x[1,x.length] }
+# a = [1,2,34,5]
+# a[1]
+# a[10]
+# a.map(2..4) { |i| i.to_f}
+# a.map { |i| i.to_f}
+# b = ["cat","bat","mat","sat"]
+# b[-1]
+# b[5]
+# b.map(2..10) { |x| x[0].upcase + x[1,x.length] }
+# b.map(2..4) { |x| x[0].upcase + x[1,x.length] }
+# b.map(-3..-1) { |x| x[0].upcase + x[1,x.length] }
+# b.map { |x| x[0].upcase + x[1,x.length] }
 
 
