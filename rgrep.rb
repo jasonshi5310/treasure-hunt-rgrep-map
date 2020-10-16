@@ -94,18 +94,22 @@ begin
             option = args[0] + '-m'
         end
     end
+    regex = Regexp.new(args[-1])
     File.open(filename, "r") do |file|
-        puts 'File content:'
-        for line in file
-            puts line
-        end
-        puts '-----------------------------------------'
+        # puts 'File content:'
+        # for line in file
+        #     puts line
+        # end
+        # puts '-----------------------------------------'
         puts 'Options:'
         puts option
         puts '------------------------------------------'
         puts 'Result:'
         case option
-        when '-p' then 
+        when '-p' then file.each_line {|line| puts line if line =~ regex}
+            # file.each_line do |line|
+            #     puts line
+            # end
         when '-p-c' then
         when '-p-m' then
         when '-w' then
