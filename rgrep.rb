@@ -26,8 +26,8 @@ end
 
 
 puts 'ARGV:'
-for arg in ARGV
-    puts arg
+for argument in ARGV
+    puts argument
 end
 puts '-----------------------------------------'
 
@@ -45,12 +45,12 @@ begin
     args = ARGV[1..-1]
     filename = ARGV[0]
     raise NoFileError if !File.file?(filename)
-    for option in args[0..-2]
-        if option.length() != 2
+    for a in args[0..-2]
+        if a.length() != 2
             raise InvalidOptionError
         end
-        dash = option[0]
-        op = option[1]
+        dash = a[0]
+        op = a[1]
         if dash != '-' or (op != 'w' and op != 'p' and op != 'v' and op != 'c' and op != 'm')
             raise InvalidOptionError
         end
@@ -64,8 +64,7 @@ begin
             if args[0] == '-m'
                 raise InvalidCombinationError
             end
-        end
-        if args[0] == '-m'
+        elsif args[0] == '-m'
             if args[1] != '-w' and args[1] != '-p'
                 raise InvalidCombinationError
             end
@@ -73,9 +72,27 @@ begin
             if args[0] != '-w' and args[0] != '-p'
                 raise InvalidCombinationError
             end
+        else
+            raise InvalidCombinationError
         end
-    else
-        raise InvalidCombinationError
+    end
+    option = '-p'
+    if args.length() == 2
+        if args[0] == '-c' or args[0] == '-m'
+            option = option + args[0]
+        else
+            option = args[0]
+        end 
+    elsif args.length == 3
+        if args[0] == '-c'
+            option = args[1] + '-c'
+        elsif args[1] == '-c'
+            option = args[0] + '-c'
+        elsif args[0] == '-m'
+            option = args[1] + '-m'
+        elsif args[1] == '-m'
+            option = args[0] + '-m'
+        end
     end
     File.open(filename, "r") do |file|
         puts 'File content:'
@@ -83,6 +100,22 @@ begin
             puts line
         end
         puts '-----------------------------------------'
+        puts 'Options:'
+        puts option
+        puts '------------------------------------------'
+        puts 'Result:'
+        case option
+        when '-p' then 
+        when '-p-c' then
+        when '-p-m' then
+        when '-w' then
+        when '-w-c' then
+        when '-w-m' then
+        when '-v' then
+        when '-v-c' then
+        else
+            puts 'Something went wrong'
+        end
     end
     # else
     #     raise NoFileError
