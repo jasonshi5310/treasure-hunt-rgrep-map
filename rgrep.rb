@@ -57,12 +57,13 @@ begin
     end
     if args.length() == 3
         if args[0] == '-c'
-            if args[1] == '-c' or args[1] = '-m'
+            if args[1] == '-c' or args[1] == '-m'
                 raise InvalidCombinationError
             end
         elsif args[1] == '-c'
-            if args[0] == '-c' or args[0] = '-m'
+            if args[0] == '-m'
                 raise InvalidCombinationError
+            end
         end
         if args[0] == '-m'
             if args[1] != '-w' and args[1] != '-p'
