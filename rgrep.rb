@@ -110,13 +110,32 @@ begin
             # file.each_line do |line|
             #     puts line
             # end
-        when '-p-c' then
-        when '-p-m' then
-        when '-w' then
-        when '-w-c' then
+        when '-p-c'
+            count = 0
+            file.each_line {|line| count+=1 if line =~ regex}
+            puts count
+        when '-p-m'
+            file.each_line do |line| # {|line| puts "#{$&}" if line =~ regex}
+                if line =~ regex
+                    puts "#{$&}"
+                end
+            end
+        when '-w'
+            regex = Regexp.new('\b'+args[-1]+'\b')
+            file.each_line {|line| puts line if line =~ regex}
+        when '-w-c'
+            count = 0
+            regex = Regexp.new('\b'+args[-1]+'\b')
+            file.each_line {|line| count+=1 if line =~ regex}
+            puts count
         when '-w-m' then
-        when '-v' then
-        when '-v-c' then
+            regex = Regexp.new('\b'+args[-1]+'\b')
+            file.each_line {|line| puts "#{$&}" if line =~ regex}
+        when '-v' then file.each_line {|line| puts line if line !~ regex}
+        when '-v-c'
+            count = 0
+            file.each_line {|line| count+=1 if line !~ regex}
+            puts count
         else
             puts 'Something went wrong'
         end
