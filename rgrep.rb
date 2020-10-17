@@ -25,11 +25,11 @@ class InvalidCombinationError<StandardError
 end
 
 
-puts 'ARGV:'
-for argument in ARGV
-    puts argument
-end
-puts '-----------------------------------------'
+# puts 'ARGV:'
+# for argument in ARGV
+#     puts argument
+# end
+# puts '-----------------------------------------'
 
 if ARGV.length() < 2
     puts MISSING_REQUIRED_ARGUMENTS
@@ -101,10 +101,10 @@ begin
         #     puts line
         # end
         # puts '-----------------------------------------'
-        puts 'Options:'
-        puts option
-        puts '------------------------------------------'
-        puts 'Result:'
+        # puts 'Options:'
+        # puts option
+        # puts '------------------------------------------'
+        # puts 'Result:'
         case option
         when '-p' then file.each_line {|line| puts line if line =~ regex}
             # file.each_line do |line|
