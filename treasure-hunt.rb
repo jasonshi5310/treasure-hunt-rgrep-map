@@ -185,3 +185,125 @@ class Room
         @neighbors.select {|room| room.number == i} [0]
     end
 end
+
+
+class Cave
+    def initialize()
+        @rooms = Array.new
+        (1..20).each {|i| @rooms.push(Room.new(i))}
+    end
+
+    attr_accessor :rooms
+
+    def room(i)
+        if (1..20).include? i
+            @rooms[i-1]
+        end
+    end
+
+    def self.dodecahedron
+        cave = Cave.new
+        #outer
+        cave.room(1).connect(cave.room(2))
+        cave.room(8).connect(cave.room(7))
+        cave.room(10).connect(cave.room(9))
+        cave.room(10).connect(cave.room(2))
+        cave.room(2).connect(cave.room(3))
+        cave.room(8).connect(cave.room(11))
+        cave.room(11).connect(cave.room(20))
+        cave.room(11).connect(cave.room(10))
+        cave.room(1).connect(cave.room(5))
+        cave.room(1).connect(cave.room(8))
+        # middle
+        cave.room(3).connect(cave.room(12))
+        cave.room(5).connect(cave.room(6))
+        cave.room(6).connect(cave.room(15))
+        cave.room(3).connect(cave.room(4))
+        cave.room(4).connect(cave.room(14))
+        cave.room(4).connect(cave.room(5))
+        cave.room(6).connect(cave.room(7))
+        cave.room(7).connect(cave.room(17))
+        cave.room(19).connect(cave.room(9))
+        cave.room(9).connect(cave.room(12))
+        cave.room(17).connect(cave.room(16))
+        cave.room(17).connect(cave.room(20))
+        cave.room(20).connect(cave.room(19))
+        cave.room(19).connect(cave.room(18))
+        cave.room(12).connect(cave.room(13))
+        # inner
+        cave.room(14).connect(cave.room(15))
+        cave.room(15).connect(cave.room(16))
+        cave.room(16).connect(cave.room(18))
+        cave.room(13).connect(cave.room(14))
+        cave.room(13).connect(cave.room(18))
+        cave
+    end
+
+    def random_room
+        random_index = Random.new.rand(@rooms.count)
+        @rooms[random_index]
+    end
+
+    def move(hazard, room, new_room)
+        if hazard.instance_of?(Symbol) and room.instance_of?(Room) and new_room.instance_of?(Room)
+            if hazard == :guard
+                if room.guard == true and new_room.guard == false
+                    room.guard = false
+                    new_room.guard = true
+                end
+            elsif hazard == :pit
+                if room.pit == true and new_room.pit == false
+                    room.pit = false
+                    new_room.pit = true
+                end
+            elsif hazard == :bats
+                if room.bats == true and new_room.bats == false
+                    room.bats = false
+                    new_room.bats = true
+                end
+            else
+                false
+            end
+        end
+    end
+
+    def add_hazard(hazard, count)
+        if hazard.instance_of?(Symbol) and count.instance_of?(Integer) and count>0
+            (1..count).each do |i|
+                room = self.random_room
+                if hazard == :guard
+                    if room.guard == true
+                        redo
+                    else
+                        room.add(hazard)
+                    end
+                elsif hazard == :pit
+                    if room.pit == true
+                        redo
+                    else
+                        room.add(hazard)
+                    end
+                elsif hazard == :bats
+                    if room.bats == true
+                        redo
+                    else
+                        room.add(hazard)
+                    end
+                else
+                    false
+                    break
+                end
+            end
+        end
+    end
+
+    def room_with(hazard)
+        if hazard.instance_of?(Symbol)
+            @rooms.select {|r| r.has?(hazard)} [0]
+        end
+    end
+
+    def entrance
+        @rooms.select {|r| r.safe?} [0]
+    end
+end
