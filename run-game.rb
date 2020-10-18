@@ -48,7 +48,7 @@ player.encounter(:bats) do
 
   player.enter(new_room)
 
-  cave.move(:bats, from: old_room, to: new_room)
+  cave.move(:bats, old_room, new_room)
 end
 
 player.encounter(:pit) do
@@ -74,7 +74,7 @@ end
 player.action(:startle_guard) do |old_guard_room|
   if [:move, :stay].sample == :move
     new_guard_room = old_guard_room.random_neighbor
-    cave.move(:guard, from: old_guard_room, to: new_guard_room)
+    cave.move(:guard, old_guard_room, new_guard_room)
 
     narrator.say("You heard a rumbling in a nearby cavern.")
   end
