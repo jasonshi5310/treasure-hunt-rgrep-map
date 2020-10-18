@@ -1,3 +1,5 @@
+require 'set'
+
 class Console
   def initialize(player, narrator)
     @player   = player
@@ -172,8 +174,12 @@ class Room
         else
             isSafe = true
             for room in neighbors
-                if room.is_safe == NOT_SAFE
-                    isSafe = false
+                # if room.is_safe == NOT_SAFE
+                #     isSafe = false
+                #     break
+                # end
+                if room.bats == true or room.pit == true or room.guard == true
+                    isSafe =false
                     break
                 end
             end
@@ -305,5 +311,72 @@ class Cave
 
     def entrance
         @rooms.select {|r| r.safe?} [0]
+    end
+end
+
+class Player
+    def initialize
+        @room = nil
+        @sense_hash = {}
+        @encounter_hash = {}
+        @action_hash = {}
+    end
+
+    attr_accessor :room
+
+    def enter(r)
+        if r.instance_of?(Room)
+            @room = r
+        end
+    end
+
+    def sense(hazard, &block)
+        #@sense_hash.store(hazard, &block)
+        @sense_hash[hazard] = block
+    end
+
+    def encounter(hazard, &block)
+        @encounter_hash.store(hazard, block)
+    end
+
+    def action(hazard, &block)
+        @action_hash.store(hazard, block)
+    end
+
+    def explore_room
+        # encountered something
+        if @room.bats != false
+            @encounter_hash[:bats].call
+        elsif @room.pit != false
+            @encounter_hash[:pit].call
+        elsif @room.guard != false
+            @encounter_hash[:guard].call
+        elsif @room.safe? == false
+            # sensed something
+            sensed = Set.new
+            @room.neighbors.each {|r|
+                if r.safe? == true
+                    next
+                end
+                if r.bats == true
+                    sensed.add(:bats)
+                end
+                if r.guard == true
+                    sensed.add(:guard)
+                end
+                if r.pit == true
+                    sensed.add(:pit)
+                end
+            }
+            if sensed.empty? != true
+                sensed.each {|hazard| @sense_hash[hazard].call}
+            end
+        end
+    end
+
+    def act(action_symbol, room)
+        if action_symbol.instance_of?(Symbol) and room.instance_of?(Room)
+            @action_hash[action_symbol].call(room)
+        end
     end
 end
