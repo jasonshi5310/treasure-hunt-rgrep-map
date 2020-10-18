@@ -13,7 +13,7 @@ cave.add_hazard(:pit, 3)
 cave.add_hazard(:bats, 3)
 
 # cave.room(7).add(:guard)
-# cave.room(19).add(:pit)
+# cave.room(6).add(:pit)
 
 # Player and narrator setup
 
@@ -50,7 +50,7 @@ player.encounter(:bats) do
 
   player.enter(new_room)
 
-  cave.move(:bats, from: old_room, to: new_room)
+  cave.move(:bats, old_room, new_room)
 end
 
 player.encounter(:pit) do

@@ -139,11 +139,11 @@ class Room
     def has?(hazard)
         if hazard.instance_of?(Symbol)
             if hazard == :guard
-                @guard
+                !!@guard
             elsif hazard == :pit
-                @pit
+                !!@pit
             elsif hazard == :bats
-                @bats
+                !!@bats
             else
                 false
             end
@@ -327,6 +327,13 @@ class Player
     def enter(r)
         if r.instance_of?(Room)
             @room = r
+            if @room.bats == true
+                @encounter_hash[:bats].call
+            elsif @room.pit == true
+                @encounter_hash[:pit].call
+            elsif @room.guard == true
+                @encounter_hash[:guard].call
+            end
         end
     end
 
@@ -336,22 +343,18 @@ class Player
     end
 
     def encounter(hazard, &block)
-        @encounter_hash.store(hazard, block)
+        #@encounter_hash.store(hazard, block)
+        @encounter_hash[hazard] = block
     end
 
     def action(hazard, &block)
-        @action_hash.store(hazard, block)
+        # @action_hash.store(hazard, block)
+        @action_hash[hazard] = block
+
     end
 
     def explore_room
-        # encountered something
-        if @room.bats != false
-            @encounter_hash[:bats].call
-        elsif @room.pit != false
-            @encounter_hash[:pit].call
-        elsif @room.guard != false
-            @encounter_hash[:guard].call
-        elsif @room.safe? == false
+        if @room.safe? == false
             # sensed something
             sensed = Set.new
             @room.neighbors.each {|r|
