@@ -1,5 +1,6 @@
 # Inplementation of grep in Ruby
-# Minqi Shi
+# cse 337 hw2 part 2
+# Minqi Shi 111548035
 
 MISSING_REQUIRED_ARGUMENTS = 'Missing required arguments'
 # NO_SUCH_FILE_OR_DIRECTORY = 'No such file or directory'
