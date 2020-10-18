@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require_relative "./treasure-hunt.rb"
+require_relative "./hunt-treasure.rb"
 
 # For testing, but also for restoring a world with the same conditions
 srand(ARGV[0].to_i) if ARGV[0]
@@ -11,9 +12,6 @@ cave = Cave.dodecahedron
 cave.add_hazard(:guard, 1)
 cave.add_hazard(:pit, 3)
 cave.add_hazard(:bats, 3)
-
-# cave.room(7).add(:guard)
-# cave.room(6).add(:pit)
 
 # Player and narrator setup
 
@@ -50,7 +48,7 @@ player.encounter(:bats) do
 
   player.enter(new_room)
 
-  cave.move(:bats, old_room, new_room)
+  cave.move(:bats, from: old_room, to: new_room)
 end
 
 player.encounter(:pit) do
@@ -76,7 +74,7 @@ end
 player.action(:startle_guard) do |old_guard_room|
   if [:move, :stay].sample == :move
     new_guard_room = old_guard_room.random_neighbor
-    cave.move(:guard, old_guard_room, new_guard_room)
+    cave.move(:guard, from: old_guard_room, to: new_guard_room)
 
     narrator.say("You heard a rumbling in a nearby cavern.")
   end
